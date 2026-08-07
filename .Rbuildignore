@@ -1,0 +1,15 @@
+^renv$
+^renv\.lock$
+^\.Rprofile$
+^\.github$
+^\.agents$
+^\.codex$
+^.*[.]Rproj$
+^.Rproj[.]user$
+^[.]git$
+^dev$
+^cran-comments[.]md$
+^CRAN-SUBMISSION$
+^.*\.Rproj$
+^\.Rproj\.user$
+^LICENSE$
