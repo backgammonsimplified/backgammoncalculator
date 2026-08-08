@@ -1,0 +1,70 @@
+name: Submit exact tarball to Winbuilder
+
+on:
+  pull_request:
+    paths:
+      - .github/workflows/submit-winbuilder-exact.yaml
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  submit-r-devel:
+    name: Submit canonical tarball to Winbuilder R-devel
+    runs-on: ubuntu-latest
+
+    env:
+      ARTIFACT_ID: '9015109860'
+      EXPECTED_SHA256: '30151fc2bf5818dfba1a57770c1fa1d929e11f5e5a8d54e84ced3cf4627ed968'
+      TARBALL: 'backgammoncalculator_0.2.0.tar.gz'
+      GH_TOKEN: ${{ github.token }}
+
+    steps:
+      - name: Download canonical GitHub Actions artifact
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifact
+          curl \
+            --fail \
+            --location \
+            --silent \
+            --show-error \
+            -H "Authorization: Bearer ${GH_TOKEN}" \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/artifacts/${ARTIFACT_ID}/zip" \
+            -o artifact.zip
+          unzip -q artifact.zip -d artifact
+
+      - name: Verify exact tarball bytes
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd artifact
+          sha256sum -c SHA256SUMS
+          actual_sha256="$(sha256sum "${TARBALL}" | awk '{print $1}')"
+          test "${actual_sha256}" = "${EXPECTED_SHA256}"
+          echo "Verified ${TARBALL}: ${actual_sha256}"
+
+      - name: Confirm Winbuilder maintainer address
+        shell: bash
+        run: |
+          set -euo pipefail
+          maintainer="$(tar -xOf "artifact/${TARBALL}" backgammoncalculator/DESCRIPTION | sed -n 's/^Maintainer: //p')"
+          test "${maintainer}" = 'Marty Gale <justsendityew@gmail.com>'
+          echo "Winbuilder results will be sent to ${maintainer}"
+
+      - name: Upload exact bytes to Winbuilder R-devel
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl \
+            --fail \
+            --show-error \
+            --ftp-pasv \
+            --upload-file "artifact/${TARBALL}" \
+            "ftp://win-builder.r-project.org/R-devel/${TARBALL}"
+          echo "Submitted ${TARBALL} to Winbuilder R-devel"
