@@ -2,7 +2,7 @@ name: Submit exact 0.2.0 tarball to CRAN
 
 on:
   pull_request:
-    types: [opened]
+    types: [opened, synchronize]
     branches: [master]
 
 permissions:
@@ -21,7 +21,7 @@ jobs:
       TARGET_SHA: a385a963ed01a6eac083dae7a1b246b1c150b3eb
       TAG_NAME: v0.2.0
       TEMP_BRANCH: ops/submit-cran-0.2.0
-      CRAN_URL: https://xmpalantir.wu.ac.at/cransubmit/index2.php
+      CRAN_ROOT: https://xmpalantir.wu.ac.at/cransubmit/
       MAINTAINER_NAME: Marty Gale
       MAINTAINER_EMAIL: justsendityew@gmail.com
 
@@ -68,7 +68,7 @@ jobs:
           printf '%s\n' "${description}" | grep -Fx 'Maintainer: Marty Gale <justsendityew@gmail.com>'
           echo "Verified exact CRAN candidate: ${actual_sha256}"
 
-      - name: Upload exact tarball to CRAN submission form
+      - name: Upload exact tarball to current CRAN form
         id: upload
         shell: bash
         run: |
@@ -76,12 +76,41 @@ jobs:
 
           comment='New submission. The exact source tarball passes R CMD check --as-cran locally with 0 errors, 0 warnings, and 1 NOTE for the new submission. Winbuilder R-devel returned Status: 1 NOTE. GitHub Actions checks pass on Ubuntu R release and R-devel, Windows R release, macOS R release, and the exact tarball also passes R 4.2.2, the declared minimum R version.'
 
+          curl --fail --location --silent --show-error \
+            --cookie-jar cran.cookies \
+            "${CRAN_ROOT}" \
+            -o cran-form.html
+
+          upload_action="$(python3 - "${CRAN_ROOT}" cran-form.html <<'PY'
+          import sys
+          from html.parser import HTMLParser
+          from urllib.parse import urljoin
+
+          class FormParser(HTMLParser):
+              def __init__(self):
+                  super().__init__()
+                  self.action = None
+              def handle_starttag(self, tag, attrs):
+                  if tag.lower() == 'form' and self.action is None:
+                      self.action = dict(attrs).get('action', '')
+
+          parser = FormParser()
+          parser.feed(open(sys.argv[2], encoding='utf-8', errors='replace').read())
+          if parser.action is None:
+              raise SystemExit('No CRAN upload form found')
+          print(urljoin(sys.argv[1], parser.action))
+          PY
+          )"
+          echo "Using CRAN upload endpoint: ${upload_action}"
+
           upload_response="$(mktemp)"
           upload_url="$(curl \
             --fail \
             --location \
             --silent \
             --show-error \
+            --cookie cran.cookies \
+            --cookie-jar cran.cookies \
             --output "${upload_response}" \
             --write-out '%{url_effective}' \
             --form-string 'pkg_id=' \
@@ -90,29 +119,60 @@ jobs:
             --form "uploaded_file=@artifact/${TARBALL};type=application/x-gzip" \
             --form-string "comment=${comment}" \
             --form-string 'upload=Upload package' \
-            "${CRAN_URL}")"
+            "${upload_action}")"
 
-          pkg_id="$(python3 - "${upload_url}" <<'PY'
+          readarray -t parsed < <(python3 - "${upload_url}" "${upload_response}" <<'PY'
           import sys
-          from urllib.parse import urlparse, parse_qs
-          query = parse_qs(urlparse(sys.argv[1]).query)
-          print(query.get('pkg_id', [''])[0])
+          from html.parser import HTMLParser
+          from urllib.parse import urlparse, parse_qs, urljoin
+
+          class Parser(HTMLParser):
+              def __init__(self):
+                  super().__init__()
+                  self.action = None
+                  self.pkg_id = ''
+              def handle_starttag(self, tag, attrs):
+                  attrs = dict(attrs)
+                  if tag.lower() == 'form' and self.action is None:
+                      self.action = attrs.get('action', '')
+                  if tag.lower() == 'input' and attrs.get('name') == 'pkg_id':
+                      self.pkg_id = attrs.get('value', '')
+
+          url = sys.argv[1]
+          body = open(sys.argv[2], encoding='utf-8', errors='replace').read()
+          query_id = parse_qs(urlparse(url).query).get('pkg_id', [''])[0]
+          parser = Parser()
+          parser.feed(body)
+          pkg_id = query_id or parser.pkg_id
+          action = urljoin(url, parser.action or '')
+          print(pkg_id)
+          print(action)
           PY
-          )"
+          )
+
+          pkg_id="${parsed[0]:-}"
+          confirm_action="${parsed[1]:-}"
 
           if [ -z "${pkg_id}" ]; then
             echo 'CRAN upload response did not provide pkg_id.' >&2
-            sed -n '1,160p' "${upload_response}" >&2
+            sed -n '1,180p' "${upload_response}" >&2
+            exit 1
+          fi
+          if [ -z "${confirm_action}" ]; then
+            echo 'CRAN upload response did not provide a confirmation form action.' >&2
+            sed -n '1,180p' "${upload_response}" >&2
             exit 1
           fi
 
-          echo "CRAN upload accepted and assigned a submission id."
+          echo 'CRAN upload accepted and assigned a submission id.'
           echo "pkg_id=${pkg_id}" >> "$GITHUB_OUTPUT"
+          echo "confirm_action=${confirm_action}" >> "$GITHUB_OUTPUT"
 
       - name: Confirm CRAN policy and submit package
         shell: bash
         env:
           PKG_ID: ${{ steps.upload.outputs.pkg_id }}
+          CONFIRM_ACTION: ${{ steps.upload.outputs.confirm_action }}
         run: |
           set -euo pipefail
 
@@ -122,6 +182,8 @@ jobs:
             --location \
             --silent \
             --show-error \
+            --cookie cran.cookies \
+            --cookie-jar cran.cookies \
             --output "${submit_response}" \
             --write-out '%{url_effective}' \
             --form-string "pkg_id=${PKG_ID}" \
@@ -129,19 +191,24 @@ jobs:
             --form-string "email=${MAINTAINER_EMAIL}" \
             --form-string 'policy_check=1/' \
             --form-string 'submit=Submit package' \
-            "${CRAN_URL}")"
+            "${CONFIRM_ACTION}")"
 
-          submitted="$(python3 - "${submit_url}" <<'PY'
+          submitted="$(python3 - "${submit_url}" "${submit_response}" <<'PY'
           import sys
           from urllib.parse import urlparse, parse_qs
-          query = parse_qs(urlparse(sys.argv[1]).query)
-          print(query.get('submit', [''])[0])
+          url = sys.argv[1]
+          body = open(sys.argv[2], encoding='utf-8', errors='replace').read().lower()
+          query = parse_qs(urlparse(url).query)
+          if query.get('submit', [''])[0] == '1' or 'package submission successful' in body or 'confirmation email' in body:
+              print('1')
+          else:
+              print('0')
           PY
           )"
 
           if [ "${submitted}" != '1' ]; then
             echo 'CRAN did not report a successful submission.' >&2
-            sed -n '1,180p' "${submit_response}" >&2
+            sed -n '1,200p' "${submit_response}" >&2
             exit 1
           fi
 
