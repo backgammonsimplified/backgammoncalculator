@@ -1,9 +1,17 @@
 # backgammoncalculator
 
+[![R-CMD-check](https://github.com/backgammonsimplified/backgammoncalculator/actions/workflows/R-CMD-check.yaml/badge.svg?branch=master)](https://github.com/backgammonsimplified/backgammoncalculator/actions/workflows/R-CMD-check.yaml)
+[![GitHub release](https://img.shields.io/github/v/release/backgammonsimplified/backgammoncalculator)](https://github.com/backgammonsimplified/backgammoncalculator/releases/latest)
+[![GitHub downloads](https://img.shields.io/github/downloads/backgammonsimplified/backgammoncalculator/total)](https://github.com/backgammonsimplified/backgammoncalculator/releases)
+[![License](https://img.shields.io/github/license/backgammonsimplified/backgammoncalculator)](https://github.com/backgammonsimplified/backgammoncalculator)
+
 `backgammoncalculator` provides complete GNUID and XGID conversion through a
 canonical backgammon position state, together with reusable calculations,
 statistical summaries, visual themes, and plot templates for backgammon
 analysis.
+
+Tested on Linux, Windows, and macOS with current R, with additional compatibility
+validation on R 4.2.2.
 
 ## Installation
 
