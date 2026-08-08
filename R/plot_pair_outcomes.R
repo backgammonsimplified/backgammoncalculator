@@ -15,14 +15,14 @@
 #' @param match_length_text Text used to describe the match length.
 #'   Defaults to `"Seven Point"`.
 #' @param colours Named character vector with colours for `Sage`, `Tied`,
-#'   and `GNU`. `NULL` uses the bundled BMS semantic palette.
-#' @param text_colour Main text colour. `NULL` uses the BMS chart token.
-#' @param muted_text_colour Secondary text colour. `NULL` uses the BMS chart
+#'   and `GNU`. `NULL` uses the bundled BS semantic palette.
+#' @param text_colour Main text colour. `NULL` uses the BS chart token.
+#' @param muted_text_colour Secondary text colour. `NULL` uses the BS chart
 #'   token.
-#' @param background_colour Plot background colour. `NULL` uses the BMS chart
+#' @param background_colour Plot background colour. `NULL` uses the BS chart
 #'   surface token.
 #' @param font_family Font family used by the figure. Defaults to the portable
-#'   R sans-serif fallback. Publication scripts may pass a registered BMS font.
+#'   R sans-serif fallback. Publication scripts may pass a registered BS font.
 #'
 #' @return A `ggplot2` plot.
 #'
@@ -54,7 +54,7 @@ plot_pair_outcomes <- function(
     text_colour = NULL,
     muted_text_colour = NULL,
     background_colour = NULL,
-    font_family = unname(bms_typography()[["r_fallback"]])) {
+    font_family = unname(bs_typography()[["r_fallback"]])) {
   pair_outcome_plot_data <- prepare_pair_outcomes(
     sage_match_wins = sage_match_wins,
     gnu_match_wins = gnu_match_wins,
@@ -112,10 +112,10 @@ plot_pair_outcomes <- function(
     )
   }
 
-  palette <- bms_analysis_palette()
+  palette <- bs_analysis_palette()
 
   if (is.null(colours)) {
-    engine_colours <- bms_engine_palette(
+    engine_colours <- bs_engine_palette(
       c("Sage", "GNU")
     )
 
@@ -156,7 +156,7 @@ plot_pair_outcomes <- function(
 
   pair_outcome_plot_data$inside_colour <- ifelse(
     pair_outcome_plot_data$outcome_group %in% c("Sage", "GNU"),
-    bms_brand$website$light$text$inverse,
+    bs_brand$website$light$text$inverse,
     text_colour
   )
 
