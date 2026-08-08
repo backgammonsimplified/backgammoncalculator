@@ -8,12 +8,25 @@
 \description{
 Provides reusable identifier conversion, calculations, statistical summaries, visual themes, and plot templates for backgammon analysis.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/backgammonsimplified/backgammoncalculator}
+  \item Report bugs at \url{https://github.com/backgammonsimplified/backgammoncalculator/issues}
+}
+
+}
 \author{
-\strong{Maintainer}: Marty Gale \email{300671762+backgammonsimplified@users.noreply.github.com}
+\strong{Maintainer}: Marty Gale \email{justsendityew@gmail.com}
 
 Authors:
 \itemize{
-  \item Marty Gale \email{300671762+backgammonsimplified@users.noreply.github.com}
+  \item Marty Gale \email{justsendityew@gmail.com}
+}
+
+Other contributors:
+\itemize{
+  \item Lasse Hjorth Madsen (GNUID/XGID conversion concepts adapted from the bglab package) [contributor]
 }
 
 }

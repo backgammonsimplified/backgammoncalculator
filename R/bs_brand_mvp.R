@@ -1,38 +1,37 @@
-#' BMS brand snapshot metadata
+#' BS brand snapshot metadata
 #'
-#' Return the metadata bundled with the generated BMS brand-token snapshot.
+#' Return the metadata bundled with the generated BS brand-token snapshot.
 #' The snapshot is generated outside this package and vendored so analysis
 #' code does not depend on a private repository at runtime.
 #'
 #' @return A named list containing the brand-kit version, source commit,
 #'   registry checksum, generation date, and source path.
 #' @export
-bms_brand_info <- function() {
-  bms_brand_metadata
+bs_brand_info <- function() {
+  bs_brand_metadata
 }
 
-
-#' BMS typography tokens
+#' BS typography tokens
 #'
-#' Return the semantic typography families bundled with the generated BMS
+#' Return the semantic typography families bundled with the generated BS
 #' brand snapshot. Consumers should use these values instead of defining
 #' notebook-local or website-local font stacks.
 #'
 #' @return A named character vector containing the primary family, CSS stack,
 #'   R fallback, and Python fallback.
 #' @export
-bms_typography <- function() {
+bs_typography <- function() {
   c(
-    primary = bms_brand$typography$family$primary,
-    css_stack = bms_brand$typography$family$fallback_css,
-    r_fallback = bms_brand$typography$family$fallback_r,
-    python_fallback = bms_brand$typography$family$fallback_python
+    primary = bs_brand$typography$family$primary,
+    css_stack = bs_brand$typography$family$fallback_css,
+    r_fallback = bs_brand$typography$family$fallback_r,
+    python_fallback = bs_brand$typography$family$fallback_python
   )
 }
 
-#' BMS engine colours
+#' BS engine colours
 #'
-#' Return the permanent BMS colour assignments for named engines. Engine
+#' Return the permanent BS colour assignments for named engines. Engine
 #' matching is case-insensitive, while returned names preserve the caller's
 #' spelling so the vector can be passed directly to a manual ggplot2 scale.
 #'
@@ -41,7 +40,7 @@ bms_typography <- function() {
 #'
 #' @return A named character vector of colours.
 #' @export
-bms_engine_palette <- function(
+bs_engine_palette <- function(
     engines = c("Sage", "GNU")) {
   if (
     !is.character(engines) ||
@@ -56,8 +55,8 @@ bms_engine_palette <- function(
   }
 
   available <- c(
-    sage = bms_engine_colours$sage,
-    gnu = bms_engine_colours$gnu
+    sage = bs_engine_colours$sage,
+    gnu = bs_engine_colours$gnu
   )
 
   keys <- tolower(engines)
@@ -65,7 +64,7 @@ bms_engine_palette <- function(
 
   if (length(unknown) > 0L) {
     stop(
-      "Unknown BMS engine colour assignment: ",
+      "Unknown BS engine colour assignment: ",
       paste(unique(unknown), collapse = ", "),
       ". Accepted engines: Sage, GNU.",
       call. = FALSE
@@ -78,55 +77,55 @@ bms_engine_palette <- function(
   )
 }
 
-#' BMS analytical colours
+#' BS analytical colours
 #'
 #' Return a compact set of semantic colours used by analytical figures.
-#' This is the first-release palette contract, not the complete future BMS
+#' This is the first-release palette contract, not the complete future BS
 #' analytical design system.
 #'
 #' @return A named character vector.
 #' @export
-bms_analysis_palette <- function() {
+bs_analysis_palette <- function() {
   c(
-    overall = bms_analysis_colours$overall,
-    difference = bms_analysis_colours$difference,
-    secondary = bms_analysis_colours$secondary,
-    threshold = bms_analysis_colours$threshold,
-    selected = bms_analysis_colours$selected,
-    excluded = bms_analysis_colours$excluded,
-    tied = bms_brand$status$neutral$surface,
-    page = bms_chart_colours$page,
-    surface = bms_chart_colours$surface,
-    panel = bms_chart_colours$panel,
-    text = bms_chart_colours$text$primary,
-    text_strong = bms_chart_colours$text$strong,
-    text_secondary = bms_chart_colours$text$secondary,
-    text_muted = bms_chart_colours$text$muted,
-    text_inverse = bms_brand$website$light$text$inverse,
-    grid = bms_chart_colours$grid,
-    reference = bms_chart_colours$reference
+    overall = bs_analysis_colours$overall,
+    difference = bs_analysis_colours$difference,
+    secondary = bs_analysis_colours$secondary,
+    threshold = bs_analysis_colours$threshold,
+    selected = bs_analysis_colours$selected,
+    excluded = bs_analysis_colours$excluded,
+    tied = bs_brand$status$neutral$surface,
+    page = bs_chart_colours$page,
+    surface = bs_chart_colours$surface,
+    panel = bs_chart_colours$panel,
+    text = bs_chart_colours$text$primary,
+    text_strong = bs_chart_colours$text$strong,
+    text_secondary = bs_chart_colours$text$secondary,
+    text_muted = bs_chart_colours$text$muted,
+    text_inverse = bs_brand$website$light$text$inverse,
+    grid = bs_chart_colours$grid,
+    reference = bs_chart_colours$reference
   )
 }
 
-#' BMS theme for analytical figures
+#' BS theme for analytical figures
 #'
-#' Provide a restrained first-release ggplot2 theme using the generated BMS
+#' Provide a restrained first-release ggplot2 theme using the generated BS
 #' chart tokens. More specialized accessibility and publication validation
 #' helpers are intentionally deferred until after the first article release.
 #'
 #' @param base_size Base text size in points.
 #' @param base_family Font family. Defaults to the portable R fallback from
-#'   the bundled BMS brand tokens.
+#'   the bundled BS brand tokens.
 #' @param background Either `"surface"`, `"page"`, or `"transparent"`.
 #'
 #' @return A ggplot2 theme.
 #' @export
-theme_bms <- function(
+theme_bs <- function(
     base_size = 11,
-    base_family = unname(bms_typography()[["r_fallback"]]),
+    base_family = unname(bs_typography()[["r_fallback"]]),
     background = c("surface", "page", "transparent")) {
   background <- match.arg(background)
-  palette <- bms_analysis_palette()
+  palette <- bs_analysis_palette()
 
   background_colour <- switch(
     background,
@@ -189,34 +188,34 @@ theme_bms <- function(
     )
 }
 
-#' BMS engine colour scale
+#' BS engine colour scale
 #'
 #' @param ... Passed to [ggplot2::scale_colour_manual()].
 #' @param engines Engine names to include in the scale.
 #'
 #' @return A ggplot2 discrete colour scale.
 #' @export
-scale_colour_bms_engine <- function(
+scale_colour_bs_engine <- function(
     ...,
     engines = c("Sage", "GNU")) {
   ggplot2::scale_colour_manual(
     ...,
-    values = bms_engine_palette(engines)
+    values = bs_engine_palette(engines)
   )
 }
 
-#' BMS engine fill scale
+#' BS engine fill scale
 #'
 #' @param ... Passed to [ggplot2::scale_fill_manual()].
 #' @param engines Engine names to include in the scale.
 #'
 #' @return A ggplot2 discrete fill scale.
 #' @export
-scale_fill_bms_engine <- function(
+scale_fill_bs_engine <- function(
     ...,
     engines = c("Sage", "GNU")) {
   ggplot2::scale_fill_manual(
     ...,
-    values = bms_engine_palette(engines)
+    values = bs_engine_palette(engines)
   )
 }

@@ -17,7 +17,7 @@ plot_pair_outcomes(
   text_colour = NULL,
   muted_text_colour = NULL,
   background_colour = NULL,
-  font_family = unname(bms_typography()[["r_fallback"]])
+  font_family = unname(bs_typography()[["r_fallback"]])
 )
 }
 \arguments{
@@ -39,18 +39,18 @@ plot_pair_outcomes(
 Defaults to \code{"Seven Point"}.}
 
 \item{colours}{Named character vector with colours for \code{Sage}, \code{Tied},
-and \code{GNU}. \code{NULL} uses the bundled BMS semantic palette.}
+and \code{GNU}. \code{NULL} uses the bundled BS semantic palette.}
 
-\item{text_colour}{Main text colour. \code{NULL} uses the BMS chart token.}
+\item{text_colour}{Main text colour. \code{NULL} uses the BS chart token.}
 
-\item{muted_text_colour}{Secondary text colour. \code{NULL} uses the BMS chart
+\item{muted_text_colour}{Secondary text colour. \code{NULL} uses the BS chart
 token.}
 
-\item{background_colour}{Plot background colour. \code{NULL} uses the BMS chart
+\item{background_colour}{Plot background colour. \code{NULL} uses the BS chart
 surface token.}
 
 \item{font_family}{Font family used by the figure. Defaults to the portable
-R sans-serif fallback. Publication scripts may pass a registered BMS font.}
+R sans-serif fallback. Publication scripts may pass a registered BS font.}
 }
 \value{
 A \code{ggplot2} plot.

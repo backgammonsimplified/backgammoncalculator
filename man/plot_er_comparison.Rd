@@ -11,7 +11,7 @@ plot_er_comparison(
   title = "Overall ER",
   subtitle = "Lower is better",
   x_label = "ER",
-  font_family = unname(bms_typography()[["r_fallback"]])
+  font_family = unname(bs_typography()[["r_fallback"]])
 )
 }
 \arguments{

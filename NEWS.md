@@ -1,3 +1,17 @@
+# backgammoncalculator 0.2.0
+
+## Branding and API
+
+- Established Backgammon Simplified as the public brand name.
+- Standardized the public brand helper API under the `bs_*` prefix, including
+  `bs_brand_info()`, `bs_typography()`, `bs_engine_palette()`,
+  `bs_analysis_palette()`, `theme_bs()`, `scale_colour_bs_engine()`, and
+  `scale_fill_bs_engine()`.
+- Standardized the bundled brand snapshot, internal brand objects, tests, and
+  documentation on BS naming.
+- Declared R 4.2.2 as the minimum supported R version based on direct package
+  validation on R 4.2.2 and current-R cross-platform CI.
+
 # backgammoncalculator 0.1.0
 
 ## Identifier conversion

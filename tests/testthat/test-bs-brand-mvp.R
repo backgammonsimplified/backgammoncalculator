@@ -1,5 +1,5 @@
-test_that("bundled BMS metadata matches the generated snapshot", {
-  info <- bms_brand_info()
+test_that("bundled BS metadata matches the generated snapshot", {
+  info <- bs_brand_info()
 
   expect_identical(
     info$brand_kit_version,
@@ -10,13 +10,17 @@ test_that("bundled BMS metadata matches the generated snapshot", {
     "45a1938655558fc85cd22defd84292e65675a1549d97a5f1a171a3ed020b8956"
   )
   expect_identical(
+    info$source_registry_checksum_scope,
+    "original pre-rename registry"
+  )
+  expect_identical(
     info$source_commit,
     "UNCOMMITTED-DRAFT"
   )
 })
 
 test_that("Sage and GNU mappings remain fixed", {
-  palette <- bms_engine_palette(
+  palette <- bs_engine_palette(
     c("Sage", "GNU")
   )
 
@@ -31,7 +35,7 @@ test_that("Sage and GNU mappings remain fixed", {
 })
 
 test_that("engine matching is case-insensitive and preserves labels", {
-  palette <- bms_engine_palette(
+  palette <- bs_engine_palette(
     c("sage", "GNU")
   )
 
@@ -47,31 +51,31 @@ test_that("engine matching is case-insensitive and preserves labels", {
 
 test_that("unknown engines fail explicitly", {
   expect_error(
-    bms_engine_palette(
+    bs_engine_palette(
       c("Sage", "Unknown engine")
     ),
-    "Unknown BMS engine colour assignment"
+    "Unknown BS engine colour assignment"
   )
 })
 
-test_that("minimal BMS theme and scales are ggplot objects", {
+test_that("minimal BS theme and scales are ggplot objects", {
   expect_s3_class(
-    theme_bms(),
+    theme_bs(),
     "theme"
   )
 
   expect_s3_class(
-    scale_colour_bms_engine(),
+    scale_colour_bs_engine(),
     "ScaleDiscrete"
   )
 
   expect_s3_class(
-    scale_fill_bms_engine(),
+    scale_fill_bs_engine(),
     "ScaleDiscrete"
   )
 })
 
-test_that("pair outcomes use bundled BMS colours by default", {
+test_that("pair outcomes use bundled BS colours by default", {
   plot <- plot_pair_outcomes(
     sage_match_wins = 7,
     gnu_match_wins = 13,

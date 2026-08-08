@@ -1,0 +1,191 @@
+on:
+  pull_request:
+  workflow_dispatch:
+
+name: Release tarball validation
+
+permissions: read-all
+
+jobs:
+  build-source-tarball:
+    name: Build source tarball once
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: release
+          use-public-rspm: true
+
+      - name: Build exact source tarball
+        id: tarball
+        shell: bash
+        run: |
+          set -euo pipefail
+          R CMD build .
+          mapfile -t tarballs < <(find . -maxdepth 1 -type f -name 'backgammoncalculator_*.tar.gz' -printf '%f\n')
+          test "${#tarballs[@]}" -eq 1
+          tarball="${tarballs[0]}"
+          sha256sum "$tarball" | tee SHA256SUMS
+          echo "name=$tarball" >> "$GITHUB_OUTPUT"
+          echo "sha256=$(sha256sum "$tarball" | awk '{print $1}')" >> "$GITHUB_OUTPUT"
+          {
+            echo "### Exact source tarball"
+            echo
+            echo "- File: \`$tarball\`"
+            echo "- SHA-256: \`$(sha256sum "$tarball" | awk '{print $1}')\`"
+            echo "- Source commit: \`$GITHUB_SHA\`"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload exact tarball bytes
+        uses: actions/upload-artifact@v4
+        with:
+          name: cran-source-tarball-${{ github.sha }}
+          path: |
+            ${{ steps.tarball.outputs.name }}
+            SHA256SUMS
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 30
+
+  clean-install-smoke:
+    name: Clean install smoke, R release
+    needs: build-source-tarball
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: release
+          use-public-rspm: true
+
+      - name: Download exact tarball bytes
+        uses: actions/download-artifact@v4
+        with:
+          name: cran-source-tarball-${{ github.sha }}
+          path: artifact
+
+      - name: Verify bytes and expose DESCRIPTION
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd artifact
+          sha256sum -c SHA256SUMS
+          mapfile -t tarballs < <(find . -maxdepth 1 -type f -name 'backgammoncalculator_*.tar.gz' -printf '%f\n')
+          test "${#tarballs[@]}" -eq 1
+          mkdir -p ../package
+          tar -xzf "${tarballs[0]}" --strip-components=1 -C ../package
+
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          working-directory: package
+          needs: check
+
+      - name: Clean install from exact tarball
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd artifact
+          sha256sum -c SHA256SUMS
+          mapfile -t tarballs < <(find . -maxdepth 1 -type f -name 'backgammoncalculator_*.tar.gz' -printf '%f\n')
+          test "${#tarballs[@]}" -eq 1
+          mkdir -p "$RUNNER_TEMP/smoke-lib"
+          R CMD INSTALL --library="$RUNNER_TEMP/smoke-lib" "${tarballs[0]}"
+
+      - name: Smoke test installed package only
+        shell: Rscript {0}
+        env:
+          SMOKE_LIB: ${{ runner.temp }}/smoke-lib
+        run: |
+          .libPaths(c(Sys.getenv("SMOKE_LIB"), .libPaths()))
+          library(backgammoncalculator)
+
+          stopifnot(as.character(packageVersion("backgammoncalculator")) == "0.2.0")
+
+          expected_exports <- c(
+            "bs_brand_info",
+            "bs_typography",
+            "bs_engine_palette",
+            "bs_analysis_palette",
+            "theme_bs",
+            "scale_colour_bs_engine",
+            "scale_fill_bs_engine",
+            "position_from_gnuid",
+            "gnuid_from_position",
+            "position_from_xgid",
+            "xgid_from_position",
+            "gnuid_to_xgid",
+            "xgid_to_gnuid"
+          )
+          stopifnot(all(expected_exports %in% getNamespaceExports("backgammoncalculator")))
+
+          gnuid <- "4HPwATDgc/ABMA:8IhuACAACAAE"
+          xgid <- paste0(
+            "XGID=-b----E-C---eE---c-e----B-",
+            ":0:0:1:53:1:2:1:3:10"
+          )
+
+          stopifnot(identical(gnuid_to_xgid(gnuid), xgid))
+          stopifnot(identical(gnuid_from_position(position_from_gnuid(gnuid)), gnuid))
+          stopifnot(identical(xgid_from_position(position_from_xgid(xgid)), xgid))
+          stopifnot(length(bs_engine_palette()) == 2L)
+          stopifnot(inherits(theme_bs(), "theme"))
+
+          p <- ggplot2::ggplot(data.frame(x = 1, y = 1), ggplot2::aes(x, y)) +
+            ggplot2::geom_point() +
+            theme_bs()
+          stopifnot(inherits(p, "ggplot"))
+
+  r-4-2-2-validation:
+    name: Exact tarball check, R 4.2.2
+    needs: build-source-tarball
+    runs-on: ubuntu-22.04
+    env:
+      _R_CHECK_CRAN_INCOMING_REMOTE_: false
+      _R_CHECK_FORCE_SUGGESTS_: true
+
+    steps:
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: '4.2.2'
+          use-public-rspm: true
+
+      - name: Download exact tarball bytes
+        uses: actions/download-artifact@v4
+        with:
+          name: cran-source-tarball-${{ github.sha }}
+          path: artifact
+
+      - name: Verify bytes and expose DESCRIPTION
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd artifact
+          sha256sum -c SHA256SUMS
+          mapfile -t tarballs < <(find . -maxdepth 1 -type f -name 'backgammoncalculator_*.tar.gz' -printf '%f\n')
+          test "${#tarballs[@]}" -eq 1
+          mkdir -p ../package
+          tar -xzf "${tarballs[0]}" --strip-components=1 -C ../package
+          {
+            echo "### R 4.2.2 byte verification"
+            echo
+            echo "- SHA-256: \`$(sha256sum "${tarballs[0]}" | awk '{print $1}')\`"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          working-directory: package
+          needs: check
+
+      - name: Check exact tarball on R 4.2.2
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd artifact
+          sha256sum -c SHA256SUMS
+          mapfile -t tarballs < <(find . -maxdepth 1 -type f -name 'backgammoncalculator_*.tar.gz' -printf '%f\n')
+          test "${#tarballs[@]}" -eq 1
+          R CMD check --no-manual --as-cran "${tarballs[0]}"
+          cat backgammoncalculator.Rcheck/00check.log

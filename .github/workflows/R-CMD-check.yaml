@@ -11,7 +11,7 @@ jobs:
   R-CMD-check:
     runs-on: ${{ matrix.config.os }}
 
-    name: ${{ matrix.config.os }} (R release)
+    name: ${{ matrix.config.os }} (R ${{ matrix.config.r }})
 
     strategy:
       fail-fast: false
@@ -20,6 +20,7 @@ jobs:
           - {os: ubuntu-latest, r: release}
           - {os: windows-latest, r: release}
           - {os: macos-latest, r: release}
+          - {os: ubuntu-latest, r: devel}
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}

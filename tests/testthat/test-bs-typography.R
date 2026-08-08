@@ -1,7 +1,7 @@
-test_that("BMS typography tokens come from the generated registry", {
-  typography <- bms_typography()
+test_that("BS typography tokens come from the generated registry", {
+  typography <- bs_typography()
   registry <- getFromNamespace(
-    "bms_brand",
+    "bs_brand",
     "backgammoncalculator"
   )
 

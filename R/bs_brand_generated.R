@@ -1,39 +1,44 @@
 # GENERATED FILE. DO NOT EDIT DIRECTLY.
 # Brand kit version: 1.0.0
-# Source commit: UNCOMMITTED-DRAFT
-# Source registry SHA-256: 45a1938655558fc85cd22defd84292e65675a1549d97a5f1a171a3ed020b8956
-# Generation date: 2026-07-21
+# Original source commit: UNCOMMITTED-DRAFT
+# Original source registry SHA-256: 45a1938655558fc85cd22defd84292e65675a1549d97a5f1a171a3ed020b8956
+# Original generation date: 2026-07-21
+# Naming migration date: 2026-08-07
 
-bms_brand_metadata <- list(
+bs_brand_metadata <- list(
   brand_kit_version = "1.0.0",
   schema_version = 1,
   source_repository = "backgammonsimplified.github.io",
   source_commit = "UNCOMMITTED-DRAFT",
   source_registry_checksum_sha256 = "45a1938655558fc85cd22defd84292e65675a1549d97a5f1a171a3ed020b8956",
+  source_registry_checksum_scope = "original pre-rename registry",
   generation_date = "2026-07-21",
+  naming_migration_date = "2026-08-07",
   generated_from = "brand/brand-tokens.yml"
 )
 
-bms_brand <- list(
+bs_brand <- list(
   metadata = list(
     brand_kit_version = "1.0.0",
     schema_version = 1,
     source_repository = "backgammonsimplified.github.io",
     source_commit = "UNCOMMITTED-DRAFT",
     source_registry_checksum_sha256 = "45a1938655558fc85cd22defd84292e65675a1549d97a5f1a171a3ed020b8956",
+    source_registry_checksum_scope = "original pre-rename registry",
     generation_date = "2026-07-21",
+    naming_migration_date = "2026-08-07",
     generated_from = "brand/brand-tokens.yml"
   ),
   brand = list(
-    name = "Backgammon Made Simple",
-    short_name = "BMS",
+    name = "Backgammon Simplified",
+    short_name = "BS",
     version = "1.0.0",
     schema_version = 1,
     status = "draft-for-review",
     source_repository = "backgammonsimplified.github.io",
     source_path = "brand/brand-tokens.yml",
     source_commit = "UNCOMMITTED-DRAFT",
-    owner = "Backgammon Made Simple",
+    owner = "Backgammon Simplified",
     public_author = "Marty Gale",
     principles = c("Use semantic tokens rather than local colour names or raw hex values.", "The website, board, and analysis systems share a brand but keep separate technical roles.", "A colour has only one meaning within a figure or component.", "Colour reinforces meaning but never carries essential meaning alone.")
   ),
@@ -564,13 +569,13 @@ bms_brand <- list(
   )
 )
 
-bms_website_colours <- bms_brand$website
-bms_board_colours <- bms_brand$board
-bms_chart_colours <- bms_brand$chart
-bms_engine_colours <- bms_brand$engine$assigned
-bms_engine_available <- bms_brand$engine$available
-bms_analysis_colours <- bms_brand$analysis
-bms_context_colours <- bms_brand$context
-bms_series_colours <- bms_brand$series$brand_dark
-bms_series_fills <- bms_brand$series$brand_fill
-bms_accessible_series <- bms_brand$series$accessible_data
+bs_website_colours <- bs_brand$website
+bs_board_colours <- bs_brand$board
+bs_chart_colours <- bs_brand$chart
+bs_engine_colours <- bs_brand$engine$assigned
+bs_engine_available <- bs_brand$engine$available
+bs_analysis_colours <- bs_brand$analysis
+bs_context_colours <- bs_brand$context
+bs_series_colours <- bs_brand$series$brand_dark
+bs_series_fills <- bs_brand$series$brand_fill
+bs_accessible_series <- bs_brand$series$accessible_data
