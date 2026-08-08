@@ -1,0 +1,64 @@
+name: Create v0.2.0 tag
+
+on:
+  push:
+    branches:
+      - ops/tag-v0.2.0
+    paths:
+      - .github/workflows/tag-v0.2.0.yaml
+
+permissions:
+  contents: write
+
+jobs:
+  tag-release:
+    name: Tag merged 0.2.0 release
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      TARGET_SHA: a385a963ed01a6eac083dae7a1b246b1c150b3eb
+      TAG_NAME: v0.2.0
+      TEMP_BRANCH: ops/tag-v0.2.0
+
+    steps:
+      - name: Verify master is the intended release commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          master_sha="$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/heads/master" --jq '.object.sha')"
+          test "${master_sha}" = "${TARGET_SHA}"
+          echo "Verified master at ${master_sha}"
+
+      - name: Create release tag
+        shell: bash
+        run: |
+          set -euo pipefail
+          existing="$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/tags/${TAG_NAME}" --jq '.object.sha' 2>/dev/null || true)"
+
+          if [ -n "${existing}" ]; then
+            test "${existing}" = "${TARGET_SHA}"
+            echo "${TAG_NAME} already exists at ${existing}"
+          else
+            gh api \
+              --method POST \
+              "repos/${GITHUB_REPOSITORY}/git/refs" \
+              -f "ref=refs/tags/${TAG_NAME}" \
+              -f "sha=${TARGET_SHA}"
+          fi
+
+      - name: Verify release tag
+        shell: bash
+        run: |
+          set -euo pipefail
+          tag_sha="$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/tags/${TAG_NAME}" --jq '.object.sha')"
+          test "${tag_sha}" = "${TARGET_SHA}"
+          echo "Verified ${TAG_NAME} at ${tag_sha}"
+
+      - name: Delete temporary branch
+        if: ${{ success() }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh api \
+            --method DELETE \
+            "repos/${GITHUB_REPOSITORY}/git/refs/heads/${TEMP_BRANCH}"
