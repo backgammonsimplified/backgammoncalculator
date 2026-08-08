@@ -1,7 +1,14 @@
 Package: backgammoncalculator
 Title: Reusable Backgammon Analysis Tools
-Version: 0.1.0
-Authors@R: person("Marty", "Gale", email = "300671762+backgammonsimplified@users.noreply.github.com", role = c("aut", "cre"))
+Version: 0.2.0
+Authors@R: c(
+    person("Marty", "Gale", email = "justsendityew@gmail.com", role = c("aut", "cre")),
+    person(
+      "Lasse", "Hjorth Madsen",
+      role = "ctb",
+      comment = "GNUID/XGID conversion concepts adapted from the bglab package"
+    )
+  )
 Description: Provides reusable complete GNUID and XGID conversion through a canonical backgammon position model, plus calculations, statistical summaries, visual themes, and plot templates for backgammon analysis. Identifier conversion is implemented locally without invoking an engine or renderer.
 License: AGPL-3
 URL: https://github.com/backgammonsimplified/backgammoncalculator
@@ -9,6 +16,8 @@ BugReports: https://github.com/backgammonsimplified/backgammoncalculator/issues
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 8.0.0
+Depends:
+    R (>= 4.2.2)
 Suggests:
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
