@@ -20,7 +20,7 @@ plot_er_comparison <- function(
     title = "Overall ER",
     subtitle = "Lower is better",
     x_label = "ER",
-    font_family = unname(bms_typography()[["r_fallback"]])) {
+    font_family = unname(bs_typography()[["r_fallback"]])) {
   if (!is.data.frame(data)) {
     stop(
       "`data` must be a data frame.",
@@ -80,7 +80,7 @@ plot_er_comparison <- function(
     )
   }
 
-  analysis_palette <- bms_analysis_palette()
+  analysis_palette <- bs_analysis_palette()
 
   text_colour <- unname(
     analysis_palette[["text"]]
@@ -106,7 +106,7 @@ plot_er_comparison <- function(
     plot_data$engine
   )
 
-  engine_palette <- bms_engine_palette(
+  engine_palette <- bs_engine_palette(
     unique(plot_data$engine)
   )
 
