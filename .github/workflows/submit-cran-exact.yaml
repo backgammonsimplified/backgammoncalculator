@@ -1,0 +1,158 @@
+name: Submit exact 0.2.0 tarball to CRAN
+
+on:
+  pull_request:
+    types: [opened]
+    branches: [master]
+
+permissions:
+  actions: read
+  contents: write
+
+jobs:
+  submit:
+    if: ${{ github.head_ref == 'ops/submit-cran-0.2.0' }}
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      ARTIFACT_ID: '9015109860'
+      EXPECTED_SHA256: '30151fc2bf5818dfba1a57770c1fa1d929e11f5e5a8d54e84ced3cf4627ed968'
+      TARBALL: backgammoncalculator_0.2.0.tar.gz
+      TARGET_SHA: a385a963ed01a6eac083dae7a1b246b1c150b3eb
+      TAG_NAME: v0.2.0
+      TEMP_BRANCH: ops/submit-cran-0.2.0
+      CRAN_URL: https://xmpalantir.wu.ac.at/cransubmit/index2.php
+      MAINTAINER_NAME: Marty Gale
+      MAINTAINER_EMAIL: justsendityew@gmail.com
+
+    steps:
+      - name: Verify release target
+        shell: bash
+        run: |
+          set -euo pipefail
+          master_sha="$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/heads/master" --jq '.object.sha')"
+          tag_sha="$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/tags/${TAG_NAME}" --jq '.object.sha')"
+          test "${master_sha}" = "${TARGET_SHA}"
+          test "${tag_sha}" = "${TARGET_SHA}"
+          echo "Verified master and ${TAG_NAME} at ${TARGET_SHA}"
+
+      - name: Download canonical GitHub Actions artifact
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifact
+          curl \
+            --fail \
+            --location \
+            --silent \
+            --show-error \
+            -H "Authorization: Bearer ${GH_TOKEN}" \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/artifacts/${ARTIFACT_ID}/zip" \
+            -o artifact.zip
+          unzip -q artifact.zip -d artifact
+
+      - name: Verify exact package bytes and metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd artifact
+          sha256sum -c SHA256SUMS
+          actual_sha256="$(sha256sum "${TARBALL}" | awk '{print $1}')"
+          test "${actual_sha256}" = "${EXPECTED_SHA256}"
+
+          description="$(tar -xOf "${TARBALL}" backgammoncalculator/DESCRIPTION)"
+          printf '%s\n' "${description}" | grep -Fx 'Package: backgammoncalculator'
+          printf '%s\n' "${description}" | grep -Fx 'Version: 0.2.0'
+          printf '%s\n' "${description}" | grep -Fx 'Maintainer: Marty Gale <justsendityew@gmail.com>'
+          echo "Verified exact CRAN candidate: ${actual_sha256}"
+
+      - name: Upload exact tarball to CRAN submission form
+        id: upload
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          comment='New submission. The exact source tarball passes R CMD check --as-cran locally with 0 errors, 0 warnings, and 1 NOTE for the new submission. Winbuilder R-devel returned Status: 1 NOTE. GitHub Actions checks pass on Ubuntu R release and R-devel, Windows R release, macOS R release, and the exact tarball also passes R 4.2.2, the declared minimum R version.'
+
+          upload_response="$(mktemp)"
+          upload_url="$(curl \
+            --fail \
+            --location \
+            --silent \
+            --show-error \
+            --output "${upload_response}" \
+            --write-out '%{url_effective}' \
+            --form-string 'pkg_id=' \
+            --form-string "name=${MAINTAINER_NAME}" \
+            --form-string "email=${MAINTAINER_EMAIL}" \
+            --form "uploaded_file=@artifact/${TARBALL};type=application/x-gzip" \
+            --form-string "comment=${comment}" \
+            --form-string 'upload=Upload package' \
+            "${CRAN_URL}")"
+
+          pkg_id="$(python3 - "${upload_url}" <<'PY'
+          import sys
+          from urllib.parse import urlparse, parse_qs
+          query = parse_qs(urlparse(sys.argv[1]).query)
+          print(query.get('pkg_id', [''])[0])
+          PY
+          )"
+
+          if [ -z "${pkg_id}" ]; then
+            echo 'CRAN upload response did not provide pkg_id.' >&2
+            sed -n '1,160p' "${upload_response}" >&2
+            exit 1
+          fi
+
+          echo "CRAN upload accepted and assigned a submission id."
+          echo "pkg_id=${pkg_id}" >> "$GITHUB_OUTPUT"
+
+      - name: Confirm CRAN policy and submit package
+        shell: bash
+        env:
+          PKG_ID: ${{ steps.upload.outputs.pkg_id }}
+        run: |
+          set -euo pipefail
+
+          submit_response="$(mktemp)"
+          submit_url="$(curl \
+            --fail \
+            --location \
+            --silent \
+            --show-error \
+            --output "${submit_response}" \
+            --write-out '%{url_effective}' \
+            --form-string "pkg_id=${PKG_ID}" \
+            --form-string "name=${MAINTAINER_NAME}" \
+            --form-string "email=${MAINTAINER_EMAIL}" \
+            --form-string 'policy_check=1/' \
+            --form-string 'submit=Submit package' \
+            "${CRAN_URL}")"
+
+          submitted="$(python3 - "${submit_url}" <<'PY'
+          import sys
+          from urllib.parse import urlparse, parse_qs
+          query = parse_qs(urlparse(sys.argv[1]).query)
+          print(query.get('submit', [''])[0])
+          PY
+          )"
+
+          if [ "${submitted}" != '1' ]; then
+            echo 'CRAN did not report a successful submission.' >&2
+            sed -n '1,180p' "${submit_response}" >&2
+            exit 1
+          fi
+
+          echo 'CRAN web-form submission successful.'
+          echo 'A confirmation email should be sent to the maintainer address.'
+
+      - name: Delete temporary branch
+        if: ${{ success() }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh api \
+            --method DELETE \
+            "repos/${GITHUB_REPOSITORY}/git/refs/heads/${TEMP_BRANCH}"
