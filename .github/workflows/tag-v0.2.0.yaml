@@ -18,6 +18,7 @@ jobs:
     env:
       TARGET_SHA: a385a963ed01a6eac083dae7a1b246b1c150b3eb
       TAG_NAME: v0.2.0
+      TEMP_BRANCH: ops/tag-v0.2.0
 
     steps:
       - name: Verify master is the intended release commit
@@ -57,3 +58,9 @@ jobs:
           remote_sha="$(git ls-remote --tags origin "refs/tags/${TAG_NAME}" | awk '{print $1}')"
           test "${remote_sha}" = "${TARGET_SHA}"
           echo "Verified ${TAG_NAME} at ${remote_sha}"
+
+      - name: Delete temporary branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git push origin --delete "${TEMP_BRANCH}"
