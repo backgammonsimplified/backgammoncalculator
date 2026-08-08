@@ -7,7 +7,7 @@
 scale_fill_bs_engine(..., engines = c("Sage", "GNU"))
 }
 \arguments{
-\item{...}{Passed to \code{ggplot2::scale_fill_manual()}.}
+\item{...}{Passed to \code{\link[ggplot2:scale_fill_manual]{ggplot2::scale_fill_manual()}}.}
 
 \item{engines}{Engine names to include in the scale.}
 }
