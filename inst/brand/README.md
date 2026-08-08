@@ -1,4 +1,4 @@
-# BMS analysis palette MVP
+# BS analysis palette MVP
 
 This is intentionally smaller than the full analytical styling prompt.
 
@@ -7,7 +7,7 @@ Included for the first article release:
 - generated brand-token snapshot;
 - stable Sage and GNU mappings;
 - compact analytical palette accessor;
-- basic `theme_bms()`;
+- basic `theme_bs()`;
 - engine colour and fill scales;
 - semantic defaults in `plot_pair_outcomes()`;
 - focused tests for the bundled snapshot and fixed engine mappings.
