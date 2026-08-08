@@ -1,11 +1,11 @@
 name: Create v0.2.0 tag
 
 on:
-  push:
+  pull_request:
     branches:
-      - ops/tag-v0.2.0
-    paths:
-      - .github/workflows/tag-v0.2.0.yaml
+      - master
+    types:
+      - opened
 
 permissions:
   contents: write
