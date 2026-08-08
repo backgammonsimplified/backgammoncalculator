@@ -90,5 +90,5 @@ notices and licenses. See
 [`GNUID_XGID_ATTRIBUTION.md`](inst/GNUID_XGID_ATTRIBUTION.md) and
 [`THIRD_PARTY_NOTICES.md`](inst/THIRD_PARTY_NOTICES.md).
 
-The license does not grant rights to use the Backgammon Made Simple name, logo,
+The license does not grant rights to use the Backgammon Simplified name, logo,
 or branding in a way that suggests an unofficial fork is the official project.
