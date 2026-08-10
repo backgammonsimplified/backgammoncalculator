@@ -136,7 +136,7 @@
 #'   group_column = "engine",
 #'   group_levels = c("Sage", "GNU"),
 #'   group_colours = bs_engine_palette(c("Sage", "GNU")),
-#'   value_formatter = function(x) sprintf("%.2f", x),
+#'   value_formatter = function(x) format(round(x, 2), nsmall = 2, trim = TRUE),
 #'   colours = distribution_colours,
 #'   x_scale = "linear",
 #'   density_points = 128L
