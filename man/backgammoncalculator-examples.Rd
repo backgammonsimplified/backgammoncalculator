@@ -11,7 +11,9 @@ validation rules, normalization, and return values.
 \details{
 The examples are grouped around the package's public workflows: identifier
 conversion, ER and runtime analysis, outcome and distribution summaries,
-plotting, and Backgammon Simplified brand helpers.
+plotting, and Backgammon Simplified brand helpers. Plot-building examples
+are wrapped in \code{\\donttest\{\}} so routine package checks stay independent of
+graphics-device and font availability; the calls are runnable as written.
 }
 \examples{
 # Identifier conversion -------------------------------------------------
@@ -25,10 +27,9 @@ gnuid_from_position(state_from_gnuid)
 xgid_from_position(state_from_xgid)
 xgid_to_gnuid(xgid)
 
-# ER summaries and comparison -----------------------------------------
+# ER summaries and comparison ------------------------------------------
 decisions <- data.frame(
   pair_id = rep(c("pair_01", "pair_02"), each = 2),
-  component = rep(c("checker", "cube"), each = 2),
   engine = rep(c("Sage", "GNU"), 2),
   equity_lost = c(0.40, 0.20, 0.60, 0.30),
   eligible_decisions = c(50, 50, 50, 50)
@@ -73,7 +74,7 @@ summarize_runtime(
   group_by = "engine"
 )
 
-# Match and mirrored-pair outcomes ------------------------------------
+# Match and mirrored-pair outcomes -------------------------------------
 prepare_pair_outcomes(
   sage_match_wins = 7,
   gnu_match_wins = 13,
@@ -82,20 +83,7 @@ prepare_pair_outcomes(
   gnu_pair_sweeps = 4
 )
 
-sage_logo <- grid::circleGrob()
-gnu_logo <- grid::circleGrob()
-
-pair_plot <- plot_pair_outcomes(
-  sage_match_wins = 7,
-  gnu_match_wins = 13,
-  sage_pair_sweeps = 1,
-  tied_pairs = 5,
-  gnu_pair_sweeps = 4,
-  sage_logo = sage_logo,
-  gnu_logo = gnu_logo
-)
-
-# Distribution helpers ------------------------------------------------
+# Distribution helpers -------------------------------------------------
 distribution_data <- data.frame(
   engine = rep(c("Sage", "GNU"), each = 6),
   value = c(
@@ -116,7 +104,27 @@ linear_distribution_breaks(linear_limits)
 pseudo_log_distribution_breaks(c(0, 1))
 format_pseudo_log_tick(c(0, 0.01, 0.5, 1, 10))
 
+# Brand helpers ---------------------------------------------------------
+bs_brand_info()
+bs_typography()
+bs_engine_palette(c("Sage", "GNU"))
 analysis_colours <- bs_analysis_palette()
+
+# Plot-building examples ------------------------------------------------
+\donttest{
+sage_logo <- grid::circleGrob()
+gnu_logo <- grid::circleGrob()
+
+pair_plot <- plot_pair_outcomes(
+  sage_match_wins = 7,
+  gnu_match_wins = 13,
+  sage_pair_sweeps = 1,
+  tied_pairs = 5,
+  gnu_pair_sweeps = 4,
+  sage_logo = sage_logo,
+  gnu_logo = gnu_logo
+)
+
 distribution_colours <- c(
   surface = analysis_colours[["surface"]],
   text = analysis_colours[["text"]],
@@ -139,13 +147,7 @@ density_plot <- plot_density_distributions(
   density_points = 128L
 )
 
-# Plotting and brand helpers ------------------------------------------
 er_plot <- plot_er_comparison(engine_er)
-
-bs_brand_info()
-bs_typography()
-bs_engine_palette(c("Sage", "GNU"))
-bs_analysis_palette()
 
 theme_plot <- ggplot2::ggplot(
   mtcars,
@@ -167,4 +169,5 @@ fill_scale_plot <- ggplot2::ggplot(
 ) +
   ggplot2::geom_col() +
   scale_fill_bs_engine()
+}
 }
