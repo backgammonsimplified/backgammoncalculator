@@ -92,6 +92,98 @@ and Backgammon Simplified styling. After loading the package, open it with:
 ?`backgammoncalculator-examples`
 ```
 
+### Visual gallery
+
+The plotting helpers are easiest to understand by seeing the intended output.
+The checked-in SVGs below are representative documentation previews that mirror
+the documented example inputs and public Backgammon Simplified brand tokens.
+Exact text metrics can vary slightly across R graphics devices and installed
+fonts.
+
+#### Compare ER values
+
+`plot_er_comparison()` produces a directly labelled comparison where lower ER
+is better.
+
+![Example ER comparison plot](man/figures/gallery-er-comparison.svg)
+
+```r
+er <- data.frame(
+  engine = c("Sage", "GNU"),
+  er = c(0.29, 0.18)
+)
+
+backgammoncalculator::plot_er_comparison(er)
+```
+
+#### Show match and mirrored-pair outcomes
+
+`plot_pair_outcomes()` turns already-calculated match and mirrored-pair counts
+into the benchmark summary figure. The simple circles in this example stand in
+for the logo grobs supplied by a publication script.
+
+![Example match and mirrored-pair outcomes plot](man/figures/gallery-pair-outcomes.svg)
+
+```r
+sage_logo <- grid::circleGrob()
+gnu_logo <- grid::circleGrob()
+
+backgammoncalculator::plot_pair_outcomes(
+  sage_match_wins = 7,
+  gnu_match_wins = 13,
+  sage_pair_sweeps = 1,
+  tied_pairs = 5,
+  gnu_pair_sweeps = 4,
+  sage_logo = sage_logo,
+  gnu_logo = gnu_logo
+)
+```
+
+#### Compare metric distributions
+
+`plot_density_distributions()` combines one density panel per group with mean,
+median, and observation-count summaries.
+
+![Example density distribution plot](man/figures/gallery-density-distributions.svg)
+
+```r
+distribution_data <- data.frame(
+  engine = rep(c("Sage", "GNU"), each = 6),
+  value = c(
+    0.10, 0.14, 0.18, 0.22, 0.28, 0.34,
+    0.08, 0.11, 0.15, 0.19, 0.24, 0.30
+  )
+)
+
+analysis_colours <- backgammoncalculator::bs_analysis_palette()
+distribution_colours <- c(
+  surface = analysis_colours[["surface"]],
+  text = analysis_colours[["text"]],
+  text_strong = analysis_colours[["text_strong"]],
+  text_muted = analysis_colours[["text_muted"]],
+  grid = analysis_colours[["grid"]],
+  mean = analysis_colours[["overall"]],
+  median = analysis_colours[["difference"]]
+)
+
+backgammoncalculator::plot_density_distributions(
+  data = distribution_data,
+  value_column = "value",
+  group_column = "engine",
+  group_levels = c("Sage", "GNU"),
+  group_colours = backgammoncalculator::bs_engine_palette(c("Sage", "GNU")),
+  value_formatter = function(x) {
+    format(round(x, 2), nsmall = 2, trim = TRUE)
+  },
+  colours = distribution_colours,
+  x_scale = "linear",
+  density_points = 128L,
+  figure_title = "Engine metric distributions",
+  figure_subtitle = "Density, mean, median, and summary statistics",
+  x_label = "Metric value"
+)
+```
+
 ### Canonical position state
 
 Decode an identifier once, inspect or transform the canonical state, and encode
@@ -134,20 +226,16 @@ backgammoncalculator::calculate_er(
 )
 ```
 
-### Plotting and brand helpers
+### Brand helpers
 
 Plots use the package's public brand tokens rather than project-local colour or
 font definitions:
 
 ```r
-er <- data.frame(
-  engine = c("Sage", "GNU"),
-  er = c(0.29, 0.18)
-)
-
-backgammoncalculator::plot_er_comparison(er)
 backgammoncalculator::bs_engine_palette(c("Sage", "GNU"))
+backgammoncalculator::bs_analysis_palette()
 backgammoncalculator::bs_typography()
+backgammoncalculator::theme_bs()
 ```
 
 The dedicated examples help topic contains complete calls for the remaining
