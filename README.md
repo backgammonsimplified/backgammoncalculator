@@ -82,6 +82,77 @@ Backgammon, use `backgammonboard`, call Python or JavaScript, or access a
 network service. The package does not evaluate position equity and does not
 render backgammon boards.
 
+## API examples
+
+The package includes a runnable API tour covering identifier conversion, ER
+analysis, runtime summaries, outcome preparation, distribution helpers, plots,
+and Backgammon Simplified styling. After loading the package, open it with:
+
+```r
+?`backgammoncalculator-examples`
+```
+
+### Canonical position state
+
+Decode an identifier once, inspect or transform the canonical state, and encode
+it again through the public boundary:
+
+```r
+gnuid <- "4HPwATDgc/ABMA:8IhuACAACAAE"
+
+position <- backgammoncalculator::position_from_gnuid(gnuid)
+backgammoncalculator::xgid_from_position(position)
+backgammoncalculator::gnuid_from_position(position)
+```
+
+### ER analysis
+
+The calculation helpers work with ordinary data frames and explicit column
+names:
+
+```r
+decisions <- data.frame(
+  engine = c("Sage", "Sage", "GNU", "GNU"),
+  equity_lost = c(0.40, 0.60, 0.20, 0.30),
+  eligible_decisions = c(50, 50, 50, 50)
+)
+
+backgammoncalculator::summarize_er(
+  data = decisions,
+  group_by = "engine",
+  equity_lost = "equity_lost",
+  eligible_decisions = "eligible_decisions"
+)
+```
+
+For a direct scalar or vector calculation:
+
+```r
+backgammoncalculator::calculate_er(
+  equity_lost = c(0.856, 0.515),
+  eligible_decisions = c(1471, 1457)
+)
+```
+
+### Plotting and brand helpers
+
+Plots use the package's public brand tokens rather than project-local colour or
+font definitions:
+
+```r
+er <- data.frame(
+  engine = c("Sage", "GNU"),
+  er = c(0.29, 0.18)
+)
+
+backgammoncalculator::plot_er_comparison(er)
+backgammoncalculator::bs_engine_palette(c("Sage", "GNU"))
+backgammoncalculator::bs_typography()
+```
+
+The dedicated examples help topic contains complete calls for the remaining
+summary, sensitivity, outcome, distribution, theme, and scale functions.
+
 ## License and attribution
 
 `backgammoncalculator` is licensed under the GNU Affero General Public License,
