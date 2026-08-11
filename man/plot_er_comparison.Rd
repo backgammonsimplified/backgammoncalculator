@@ -36,3 +36,12 @@ A ggplot object.
 Create a directly labelled horizontal dot plot comparing ER values across
 engines. Lower values are better.
 }
+\examples{
+er <- data.frame(
+  engine = c("Sage", "GNU"),
+  er = c(0.29, 0.18)
+)
+
+plot_er_comparison(er)
+
+}
