@@ -1,0 +1,55 @@
+url: https://backgammonsimplified.github.io/backgammoncalculator/
+
+template:
+  bootstrap: 5
+
+development:
+  mode: release
+
+reference:
+- title: Start here
+  contents:
+  - backgammoncalculator-package
+  - backgammoncalculator-examples
+
+- title: Position identifiers
+  contents:
+  - position_from_gnuid
+  - position_from_xgid
+  - gnuid_from_position
+  - xgid_from_position
+  - gnuid_to_xgid
+  - xgid_to_gnuid
+
+- title: Error rate and runtime
+  contents:
+  - calculate_er
+  - summarize_er
+  - compare_er
+  - leave_one_out_er
+  - summarize_runtime
+
+- title: Outcomes and distributions
+  contents:
+  - prepare_pair_outcomes
+  - metric_distribution_summary
+  - nice_distribution_limits
+  - linear_distribution_breaks
+  - pseudo_log_distribution_breaks
+  - format_pseudo_log_tick
+
+- title: Plots
+  contents:
+  - plot_er_comparison
+  - plot_pair_outcomes
+  - plot_density_distributions
+
+- title: Branding and themes
+  contents:
+  - bs_brand_info
+  - bs_typography
+  - bs_engine_palette
+  - bs_analysis_palette
+  - theme_bs
+  - scale_colour_bs_engine
+  - scale_fill_bs_engine
