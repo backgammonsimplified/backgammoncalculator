@@ -11,7 +11,7 @@ Authors@R: c(
   )
 Description: Provides reusable complete GNUID and XGID conversion through a canonical backgammon position model, plus calculations, statistical summaries, visual themes, and plot templates for backgammon analysis. Identifier conversion is implemented locally without invoking an engine or renderer.
 License: AGPL-3
-URL: https://backgammonsimplified.github.io/backgammoncalculator/, https://github.com/backgammonsimplified/backgammoncalculator
+URL: https://backgammonsimplified.github.io/about/backgammoncalculator/, https://github.com/backgammonsimplified/backgammoncalculator
 BugReports: https://github.com/backgammonsimplified/backgammoncalculator/issues
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
