@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">Density distributions example</title>
+  <desc id="desc">A representative output from plot_density_distributions with separate Sage and GNU density panels plus summary statistics.</desc>
+  <rect width="1200" height="760" fill="#FFFDFC"/>
+  <text x="72" y="58" fill="#11182F" font-family="sans-serif" font-size="34" font-weight="700">Engine metric distributions</text>
+  <text x="72" y="94" fill="#5F626E" font-family="sans-serif" font-size="22">Density, mean, median, and summary statistics</text>
+  <g stroke="#D9CCC0" stroke-width="2">
+    <line x1="90" y1="135" x2="90" y2="640"/>
+    <line x1="280" y1="135" x2="280" y2="640"/>
+    <line x1="470" y1="135" x2="470" y2="640"/>
+    <line x1="660" y1="135" x2="660" y2="640"/>
+    <line x1="850" y1="135" x2="850" y2="640"/>
+  </g>
+  <g fill="#1B2040" font-family="sans-serif" font-size="19" text-anchor="middle">
+    <text x="90" y="682">0.0</text>
+    <text x="280" y="682">0.1</text>
+    <text x="470" y="682">0.2</text>
+    <text x="660" y="682">0.3</text>
+    <text x="850" y="682">0.4</text>
+  </g>
+  <text x="90" y="140" fill="#11182F" font-family="sans-serif" font-size="27" font-weight="700">Sage Distribution</text>
+  <path d="M90 275 C145 274 190 250 240 220 C300 184 355 169 410 170 C495 172 555 195 625 199 C700 204 785 231 850 258 L850 275 Z" fill="#915634" fill-opacity="0.30" stroke="#915634" stroke-width="4"/>
+  <line x1="489" y1="163" x2="489" y2="287" stroke="#FFFFFF" stroke-width="10"/>
+  <line x1="489" y1="163" x2="489" y2="287" stroke="#111B35" stroke-width="4"/>
+  <line x1="470" y1="163" x2="470" y2="287" stroke="#FFFFFF" stroke-width="10"/>
+  <line x1="470" y1="163" x2="470" y2="287" stroke="#6E557A" stroke-width="4"/>
+  <rect x="900" y="125" width="235" height="142" rx="12" fill="#FAF7F2" stroke="#D9CCC0" stroke-width="2"/>
+  <g font-family="sans-serif" font-size="19">
+    <text x="918" y="162" fill="#11182F" font-weight="700">Observations</text><text x="1117" y="162" text-anchor="end" fill="#1B2040">6</text>
+    <text x="918" y="198" fill="#11182F" font-weight="700">Mean</text><text x="1117" y="198" text-anchor="end" fill="#1B2040">0.21</text>
+    <text x="918" y="234" fill="#11182F" font-weight="700">Median</text><text x="1117" y="234" text-anchor="end" fill="#1B2040">0.20</text>
+  </g>
+  <text x="90" y="385" fill="#11182F" font-family="sans-serif" font-size="27" font-weight="700">GNU Distribution</text>
+  <path d="M90 520 C135 515 180 480 225 450 C275 420 320 414 365 416 C440 420 505 435 565 445 C650 459 770 502 850 517 L850 520 Z" fill="#3D5F87" fill-opacity="0.30" stroke="#3D5F87" stroke-width="4"/>
+  <line x1="429" y1="408" x2="429" y2="532" stroke="#FFFFFF" stroke-width="10"/>
+  <line x1="429" y1="408" x2="429" y2="532" stroke="#111B35" stroke-width="4"/>
+  <line x1="413" y1="408" x2="413" y2="532" stroke="#FFFFFF" stroke-width="10"/>
+  <line x1="413" y1="408" x2="413" y2="532" stroke="#6E557A" stroke-width="4"/>
+  <rect x="900" y="370" width="235" height="142" rx="12" fill="#FAF7F2" stroke="#D9CCC0" stroke-width="2"/>
+  <g font-family="sans-serif" font-size="19">
+    <text x="918" y="407" fill="#11182F" font-weight="700">Observations</text><text x="1117" y="407" text-anchor="end" fill="#1B2040">6</text>
+    <text x="918" y="443" fill="#11182F" font-weight="700">Mean</text><text x="1117" y="443" text-anchor="end" fill="#1B2040">0.18</text>
+    <text x="918" y="479" fill="#11182F" font-weight="700">Median</text><text x="1117" y="479" text-anchor="end" fill="#1B2040">0.17</text>
+  </g>
+  <text x="470" y="730" text-anchor="middle" fill="#1B2040" font-family="sans-serif" font-size="22" font-weight="700">Metric value</text>
+</svg>

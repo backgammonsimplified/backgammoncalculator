@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">Match and mirrored-pair outcomes example</title>
+  <desc id="desc">A representative output from plot_pair_outcomes using simple circle grobs as logo placeholders, with 7 Sage match wins, 13 GNU match wins, and ten mirrored match-pair outcomes.</desc>
+  <rect width="1200" height="760" fill="#FFFDFC"/>
+  <circle cx="505" cy="62" r="28" fill="none" stroke="#5F626E" stroke-width="3"/>
+  <text x="600" y="70" text-anchor="middle" fill="#5F626E" font-family="sans-serif" font-size="24" font-weight="700">vs</text>
+  <circle cx="695" cy="62" r="28" fill="none" stroke="#5F626E" stroke-width="3"/>
+  <text x="80" y="140" fill="#11182F" font-family="sans-serif" font-size="31" font-weight="700">Match Score after 20 Seven Point Matches</text>
+  <rect x="80.0" y="215" width="364.0" height="100" fill="#915634" stroke="#FFFDFC" stroke-width="4"/>
+  <text x="262.0" y="254" text-anchor="middle" fill="#FFFFFF" font-family="sans-serif" font-size="30" font-weight="700">7</text>
+  <text x="262.0" y="287" text-anchor="middle" fill="#FFFFFF" font-family="sans-serif" font-size="21" font-weight="700">35%</text>
+  <text x="262.0" y="193" text-anchor="middle" fill="#1B2040" font-family="sans-serif" font-size="24" font-weight="700">Sage won</text>
+  <rect x="444.0" y="215" width="676.0" height="100" fill="#3D5F87" stroke="#FFFDFC" stroke-width="4"/>
+  <text x="782.0" y="254" text-anchor="middle" fill="#FFFFFF" font-family="sans-serif" font-size="30" font-weight="700">13</text>
+  <text x="782.0" y="287" text-anchor="middle" fill="#FFFFFF" font-family="sans-serif" font-size="21" font-weight="700">65%</text>
+  <text x="782.0" y="193" text-anchor="middle" fill="#1B2040" font-family="sans-serif" font-size="24" font-weight="700">GNU won</text>
+  <text x="80" y="430" fill="#11182F" font-family="sans-serif" font-size="31" font-weight="700">Mirrored Dice Match Score after 10 Seven Point Match Pairs</text>
+  <rect x="80.0" y="540" width="104.0" height="100" fill="#915634" stroke="#FFFDFC" stroke-width="4"/>
+  <text x="132.0" y="579" text-anchor="middle" fill="#FFFFFF" font-family="sans-serif" font-size="30" font-weight="700">1</text>
+  <text x="132.0" y="612" text-anchor="middle" fill="#FFFFFF" font-family="sans-serif" font-size="21" font-weight="700">10%</text>
+  <text x="132.0" y="492" text-anchor="middle" fill="#1B2040" font-family="sans-serif" font-size="22" font-weight="700">Sage Swept</text>
+  <text x="132.0" y="520" text-anchor="middle" fill="#5F626E" font-family="sans-serif" font-size="18" font-weight="700">(2-0)</text>
+  <rect x="184.0" y="540" width="520.0" height="100" fill="#ECEEF0" stroke="#FFFDFC" stroke-width="4"/>
+  <text x="444.0" y="579" text-anchor="middle" fill="#1B2040" font-family="sans-serif" font-size="30" font-weight="700">5</text>
+  <text x="444.0" y="612" text-anchor="middle" fill="#1B2040" font-family="sans-serif" font-size="21" font-weight="700">50%</text>
+  <text x="444.0" y="492" text-anchor="middle" fill="#1B2040" font-family="sans-serif" font-size="22" font-weight="700">Tied</text>
+  <text x="444.0" y="520" text-anchor="middle" fill="#5F626E" font-family="sans-serif" font-size="18" font-weight="700">(1-1)</text>
+  <rect x="704.0" y="540" width="416.0" height="100" fill="#3D5F87" stroke="#FFFDFC" stroke-width="4"/>
+  <text x="912.0" y="579" text-anchor="middle" fill="#FFFFFF" font-family="sans-serif" font-size="30" font-weight="700">4</text>
+  <text x="912.0" y="612" text-anchor="middle" fill="#FFFFFF" font-family="sans-serif" font-size="21" font-weight="700">40%</text>
+  <text x="912.0" y="492" text-anchor="middle" fill="#1B2040" font-family="sans-serif" font-size="22" font-weight="700">GNU Swept</text>
+  <text x="912.0" y="520" text-anchor="middle" fill="#5F626E" font-family="sans-serif" font-size="18" font-weight="700">(2-0)</text>
+</svg>

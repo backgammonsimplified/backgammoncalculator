@@ -12,6 +12,15 @@
 #' @param font_family Font family for plot text.
 #'
 #' @return A ggplot object.
+#'
+#' @examples
+#' er <- data.frame(
+#'   engine = c("Sage", "GNU"),
+#'   er = c(0.29, 0.18)
+#' )
+#'
+#' plot_er_comparison(er)
+#'
 #' @export
 plot_er_comparison <- function(
     data,
