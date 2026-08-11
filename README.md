@@ -258,10 +258,43 @@ backgammoncalculator::summarize_er(
   equity_lost = "equity_lost",
   eligible_decisions = "eligible_decisions"
 )
+#>   engine equity_lost eligible_decisions  er
+#> 1   Sage         1.0                100 5.0
+#> 2    GNU         0.5                100 2.5
 ```
 
-For a function-by-function runnable tour, open:
+For a direct scalar or vector calculation:
 
 ```r
-?`backgammoncalculator-examples`
+backgammoncalculator::calculate_er(
+  equity_lost = c(0.856, 0.515),
+  eligible_decisions = c(1471, 1457)
+)
+#> [1] 0.2909585 0.1767330
 ```
+
+### Brand helpers
+
+Plots use the package's public brand tokens rather than project-local colour or
+font definitions:
+
+```r
+backgammoncalculator::bs_engine_palette(c("Sage", "GNU"))
+backgammoncalculator::bs_analysis_palette()
+backgammoncalculator::bs_typography()
+backgammoncalculator::theme_bs()
+```
+
+The dedicated examples help topic contains complete calls for the remaining
+summary, sensitivity, outcome, distribution, theme, and scale functions.
+
+## License and attribution
+
+`backgammoncalculator` is licensed under the GNU Affero General Public License,
+version 3. Third-party components and adapted concepts retain their applicable
+notices and licenses. See
+[`GNUID_XGID_ATTRIBUTION.md`](inst/GNUID_XGID_ATTRIBUTION.md) and
+[`THIRD_PARTY_NOTICES.md`](inst/THIRD_PARTY_NOTICES.md).
+
+The license does not grant rights to use the Backgammon Simplified name, logo,
+or branding in a way that suggests an unofficial fork is the official project.
