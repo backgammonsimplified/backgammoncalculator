@@ -11,6 +11,18 @@
 #' @param gnu_pair_sweeps Number of mirrored pairs swept by GNU.
 #'
 #' @return A data frame with one row per outcome segment.
+#'
+#' @examples
+#' outcomes <- prepare_pair_outcomes(
+#'   sage_match_wins = 7,
+#'   gnu_match_wins = 13,
+#'   sage_pair_sweeps = 1,
+#'   tied_pairs = 5,
+#'   gnu_pair_sweeps = 4
+#' )
+#'
+#' outcomes[, c("score_type", "outcome", "count", "share")]
+#'
 #' @export
 prepare_pair_outcomes <- function(
     sage_match_wins,
