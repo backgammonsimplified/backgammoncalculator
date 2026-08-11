@@ -23,5 +23,6 @@
 #'   helpers.
 #'
 #' @seealso [backgammoncalculator-examples]
+#' @importFrom patchwork plot_layout
 #' @keywords internal
 "_PACKAGE"
