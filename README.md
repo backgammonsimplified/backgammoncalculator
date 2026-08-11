@@ -84,12 +84,46 @@ render backgammon boards.
 
 ## API examples
 
-The package includes a runnable API tour covering identifier conversion, ER
-analysis, runtime summaries, outcome preparation, distribution helpers, plots,
-and Backgammon Simplified styling. After loading the package, open it with:
+After loading the package, start with the package overview to see the public API
+grouped by task:
+
+```r
+?backgammoncalculator
+```
+
+For a copy-and-run tour covering identifier conversion, ER analysis, runtime
+summaries, outcome preparation, distribution helpers, plots, and Backgammon
+Simplified styling, open:
 
 ```r
 ?`backgammoncalculator-examples`
+```
+
+### 5-minute ER workflow
+
+A typical analysis starts with ordinary decision data, pools ER by engine, and
+passes the resulting summary directly to the plotting helper:
+
+```r
+decisions <- data.frame(
+  engine = c("Sage", "Sage", "GNU", "GNU"),
+  equity_lost = c(0.40, 0.60, 0.20, 0.30),
+  eligible_decisions = c(50, 50, 50, 50)
+)
+
+engine_er <- backgammoncalculator::summarize_er(
+  data = decisions,
+  group_by = "engine",
+  equity_lost = "equity_lost",
+  eligible_decisions = "eligible_decisions"
+)
+
+engine_er
+#>   engine equity_lost eligible_decisions  er
+#> 1   Sage         1.0                100 5.0
+#> 2    GNU         0.5                100 2.5
+
+backgammoncalculator::plot_er_comparison(engine_er)
 ```
 
 ### Visual gallery
@@ -215,6 +249,9 @@ backgammoncalculator::summarize_er(
   equity_lost = "equity_lost",
   eligible_decisions = "eligible_decisions"
 )
+#>   engine equity_lost eligible_decisions  er
+#> 1   Sage         1.0                100 5.0
+#> 2    GNU         0.5                100 2.5
 ```
 
 For a direct scalar or vector calculation:
@@ -224,6 +261,7 @@ backgammoncalculator::calculate_er(
   equity_lost = c(0.856, 0.515),
   eligible_decisions = c(1471, 1457)
 )
+#> [1] 0.2909585 0.1767330
 ```
 
 ### Brand helpers
