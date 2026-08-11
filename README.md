@@ -13,6 +13,21 @@ analysis.
 Tested on Linux, Windows, and macOS with current R, with additional compatibility
 validation on R 4.2.2.
 
+## Documentation
+
+The browser documentation is built with pkgdown and includes this quick-start
+material, the visual gallery, and reference pages generated from the package
+help topics:
+
+<https://backgammonsimplified.github.io/backgammoncalculator/>
+
+Inside R, start with:
+
+```r
+?backgammoncalculator
+?`backgammoncalculator-examples`
+```
+
 ## Installation
 
 The package can be installed from the public GitHub repository with:
@@ -84,25 +99,18 @@ render backgammon boards.
 
 ## API examples
 
-After loading the package, start with the package overview to see the public API
-grouped by task:
-
-```r
-?backgammoncalculator
-```
-
-For a copy-and-run tour covering identifier conversion, ER analysis, runtime
-summaries, outcome preparation, distribution helpers, plots, and Backgammon
-Simplified styling, open:
+The package includes a runnable API tour covering identifier conversion, ER
+analysis, runtime summaries, outcome preparation, distribution helpers, plots,
+and Backgammon Simplified styling. After loading the package, open it with:
 
 ```r
 ?`backgammoncalculator-examples`
 ```
 
-### 5-minute ER workflow
+### Five-minute ER workflow
 
-A typical analysis starts with ordinary decision data, pools ER by engine, and
-passes the resulting summary directly to the plotting helper:
+Start with ordinary decision-level data, summarize each engine, and plot the
+result:
 
 ```r
 decisions <- data.frame(
