@@ -6,9 +6,30 @@
 \alias{backgammoncalculator-package}
 \title{backgammoncalculator: Reusable Backgammon Analysis Tools}
 \description{
-Provides reusable identifier conversion, calculations, statistical summaries, visual themes, and plot templates for backgammon analysis.
+\code{backgammoncalculator} provides local GNUID/XGID conversion through a
+canonical backgammon position state, reusable error-rate and runtime
+summaries, outcome and distribution helpers, and Backgammon Simplified
+plotting utilities.
+}
+\section{Start here}{
+
+For a runnable tour of the main workflows, open
+\code{?backgammoncalculator-examples}. The examples are designed to be copied
+directly into an R session.
+}
+
+\section{Main workflows}{
+
+\itemize{
+\item \strong{Identifiers:} \code{\link[=position_from_gnuid]{position_from_gnuid()}}, \code{\link[=position_from_xgid]{position_from_xgid()}}, \code{\link[=gnuid_from_position]{gnuid_from_position()}}, \code{\link[=xgid_from_position]{xgid_from_position()}}, \code{\link[=gnuid_to_xgid]{gnuid_to_xgid()}}, and \code{\link[=xgid_to_gnuid]{xgid_to_gnuid()}}.
+\item \strong{ER and runtime analysis:} \code{\link[=calculate_er]{calculate_er()}}, \code{\link[=summarize_er]{summarize_er()}}, \code{\link[=compare_er]{compare_er()}}, \code{\link[=leave_one_out_er]{leave_one_out_er()}}, and \code{\link[=summarize_runtime]{summarize_runtime()}}.
+\item \strong{Outcomes and distributions:} \code{\link[=prepare_pair_outcomes]{prepare_pair_outcomes()}}, \code{\link[=metric_distribution_summary]{metric_distribution_summary()}}, and the distribution-axis helpers.
+\item \strong{Plots and styling:} \code{\link[=plot_er_comparison]{plot_er_comparison()}}, \code{\link[=plot_pair_outcomes]{plot_pair_outcomes()}}, \code{\link[=plot_density_distributions]{plot_density_distributions()}}, \code{\link[=theme_bs]{theme_bs()}}, and the BS palette/scale helpers.
+}
 }
 \seealso{
+\code{\link{backgammoncalculator-examples}}
+
 Useful links:
 \itemize{
   \item \url{https://github.com/backgammonsimplified/backgammoncalculator}
