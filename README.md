@@ -17,7 +17,8 @@ validation on R 4.2.2.
 
 The browser documentation is built with pkgdown and includes this quick-start
 material, the visual gallery, and reference pages generated from the package
-help topics:
+help topics. After this documentation branch is merged and the Pages workflow
+has deployed, it will be available at:
 
 <https://backgammonsimplified.github.io/backgammoncalculator/>
 
